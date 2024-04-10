@@ -7,7 +7,7 @@ import os
 import platform
 from typing import Sequence
 
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, UnidentifiedImageError, ExifTags
 
 from . import __version__
 
@@ -34,7 +34,7 @@ def process_image(filename: str | os.PathLike) -> bool:
         with Image.open(filename) as im:
             exif = im.getexif()
             if exif:
-                exif.clear()
+                exif.get_ifd(ExifTags.GPSTAGS.clear())
                 im.save(filename)
                 has_changed = True
     except (FileNotFoundError, UnidentifiedImageError):
